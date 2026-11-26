@@ -1,0 +1,16 @@
+# Where the specs live, which corrections to apply, and where each logical
+# service actually points. Every value here can be overridden by an
+# environment variable, so secrets never need to be written to this file:
+#
+#   BRIDGE_<SERVICE>_BASE_URL   e.g. BRIDGE_NOTES_BASE_URL
+#   BRIDGE_TOKEN                bearer token picked up by the `login` MCP tool
+
+specs_dir: specs
+overrides: overrides.yaml
+default_service: notes
+
+services:
+  notes:
+    base_url: http://127.0.0.1:18787
+  petstore:
+    base_url: https://petstore3.swagger.io/api/v3

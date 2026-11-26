@@ -1,0 +1,30 @@
+# Corrections applied on top of the exported specs.
+#
+# Two rules:
+#   1. Correct here, never in the exported file — exports get regenerated and
+#      your edits are silently lost.
+#   2. Every entry carries a `reason`. Six months from now the reason is the
+#      only thing that tells a reader whether the correction is still needed.
+#
+# Allowed fields in `set`: path, method, risk, auth, service, content_type,
+# deprecated.
+
+overrides:
+  - project: notes
+    method: GET
+    path: /notes/legacy
+    set:
+      method: POST
+    reason: >-
+      The export still lists a GET, but the handler only registers POST
+      (mock_api.py). Sending GET returns 405.
+
+  - project: notes
+    method: POST
+    path: /notes/search
+    set:
+      risk: read
+    reason: >-
+      POST by transport, read-only in effect. Without this it is classified
+      write and every search demands a confirmation — which trains people to
+      click through confirmations, defeating the guard.

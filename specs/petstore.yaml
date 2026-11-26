@@ -1,0 +1,178 @@
+openapi: 3.0.3
+info:
+  title: Swagger Petstore
+  version: 1.0.0
+  description: >-
+    The public Petstore v3 corpus, used here to show what a real, multi-tag
+    spec looks like once indexed. Calls go to https://petstore3.swagger.io
+    (or to the bundled mock, if you point the service at localhost).
+x-project: petstore
+x-service: petstore
+x-auth: none
+servers:
+  - url: https://petstore3.swagger.io/api/v3
+tags:
+  - name: pet
+  - name: store
+  - name: user
+paths:
+  /pet:
+    post:
+      tags: [pet]
+      summary: Add a new pet to the store
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: doggie
+                status:
+                  type: string
+                  example: available
+      responses:
+        "200":
+          description: ok
+    put:
+      tags: [pet]
+      summary: Update an existing pet
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 1
+                name:
+                  type: string
+                  example: doggie
+      responses:
+        "200":
+          description: ok
+  /pet/findByStatus:
+    get:
+      tags: [pet]
+      summary: Find pets by status
+      parameters:
+        - name: status
+          in: query
+          required: true
+          schema:
+            type: string
+            example: available
+      responses:
+        "200":
+          description: ok
+  /pet/{petId}:
+    get:
+      tags: [pet]
+      summary: Find pet by ID
+      parameters:
+        - name: petId
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "200":
+          description: ok
+    post:
+      tags: [pet]
+      summary: Update a pet with form data
+      parameters:
+        - name: petId
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: doggie
+                status:
+                  type: string
+                  example: sold
+      responses:
+        "200":
+          description: ok
+    delete:
+      tags: [pet]
+      summary: Delete a pet
+      x-risk: dangerous
+      parameters:
+        - name: petId
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "200":
+          description: ok
+  /store/inventory:
+    get:
+      tags: [store]
+      summary: Returns pet inventories by status
+      x-service: petstore
+      responses:
+        "200":
+          description: ok
+  /store/order:
+    post:
+      tags: [store]
+      summary: Place an order for a pet
+      x-risk: write
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                petId:
+                  type: integer
+                  example: 1
+                quantity:
+                  type: integer
+                  example: 1
+      responses:
+        "200":
+          description: ok
+  /store/order/{orderId}:
+    get:
+      tags: [store]
+      summary: Find purchase order by ID
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "200":
+          description: ok
+  /user/{username}:
+    get:
+      tags: [user]
+      summary: Get user by user name
+      parameters:
+        - name: username
+          in: path
+          required: true
+          schema:
+            type: string
+            example: user1
+      responses:
+        "200":
+          description: ok

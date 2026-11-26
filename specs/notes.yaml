@@ -1,0 +1,125 @@
+openapi: 3.0.3
+info:
+  title: Notes
+  version: 1.0.0
+  description: >-
+    A small second corpus living on a different host, to demonstrate
+    per-service routing and empirical overrides. Backed by examples/mock_api.py.
+x-project: notes
+x-service: notes
+x-auth: none
+servers:
+  - url: http://127.0.0.1:18787
+tags:
+  - name: notes
+paths:
+  /notes:
+    get:
+      tags: [notes]
+      summary: List all notes
+      responses:
+        "200":
+          description: ok
+    post:
+      tags: [notes]
+      summary: Create a note
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: hello
+                body:
+                  type: string
+                  example: world
+      responses:
+        "201":
+          description: created
+  /notes/{noteId}:
+    get:
+      tags: [notes]
+      summary: Get one note
+      parameters:
+        - name: noteId
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "200":
+          description: ok
+    put:
+      tags: [notes]
+      summary: Replace a note
+      parameters:
+        - name: noteId
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: hello
+                body:
+                  type: string
+                  example: updated
+      responses:
+        "200":
+          description: ok
+    delete:
+      tags: [notes]
+      summary: Delete a note
+      x-risk: dangerous
+      parameters:
+        - name: noteId
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "204":
+          description: deleted
+  /notes/search:
+    post:
+      tags: [notes]
+      summary: Search notes by text
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                q:
+                  type: string
+                  example: hello
+      responses:
+        "200":
+          description: ok
+  # Kept on purpose: this entry is wrong in the document and corrected in
+  # overrides.yaml. It is the shape of mistake that shows up in every large
+  # generated corpus — a renamed route the export never picked up.
+  /notes/legacy:
+    get:
+      tags: [notes]
+      summary: Legacy note lookup
+      parameters:
+        - name: q
+          in: query
+          schema:
+            type: string
+            example: hello
+      responses:
+        "200":
+          description: ok
